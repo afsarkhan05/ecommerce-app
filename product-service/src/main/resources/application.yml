@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: product-service
+  profile:
+    active: default
+  datasource:
+    url: jdbc:postgresql://localhost:5432/food_ordering_system?currentSchema=product_mgmt&binaryTransfer=true&reWriteBatchedInserts=true
+    username: admin
+    password: admin
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: product_mgmt
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  cloud:
+    discovery:
+      enabled: false
+server:
+  port: 8082
+  servlet:
+    context-path: /product-service
+
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
