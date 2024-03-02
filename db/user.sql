@@ -1,12 +1,11 @@
 create schema user_mgmt;
 
 CREATE TABLE user_mgmt.user_detail (
-  id integer PRIMARY KEY,
-  name VARCHAR(255) NOT NULL
+  id BIGSERIAL PRIMARY KEY,
+  userName VARCHAR(20) NOT NULL,
+  password VARCHAR(120) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  status VARCHAR(20)
 );
-
-insert into user_mgmt.user_detail (id, name) values (1, 'sherry');
-insert into user_mgmt.user_detail (id, name) values (2, 'larry');
-insert into user_mgmt.user_detail (id, name) values (3, 'john');
 
 

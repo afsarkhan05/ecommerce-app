@@ -1,10 +1,10 @@
 package com.zubi.ecommerce.user.model;
 
 import com.zubi.ecommerce.user.dto.UserDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,15 +21,31 @@ public class User {
 
     @Column( name = "id")
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name ="name")
-    private String name;
+    @NotBlank
+    @Size(max = 20)
+    @Column(name = "userName")
+    private String userName;
+
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
+
+    @NotBlank
+    @Size(max = 120)
+    private String password;
+
+    private String status;
 
     public UserDTO toUserDTO(){
         return UserDTO.builder()
-                .userName(this.getName())
                 .userId(this.getId())
+                .userName(getUserName())
+                .password(getPassword())
+                .email(getEmail())
                 .build();
     }
 }

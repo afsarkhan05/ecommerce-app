@@ -11,10 +11,17 @@ public class UserDTO {
     private Long userId;
     private String userName;
 
+    private String email;
+
+    private String password;
+
+
     public User toUser(){
         return User.builder()
                 .id(getUserId())
-                .name(getUserName())
+                .userName(getUserName())
+                .password(getPassword())
+                .email(getEmail())
                 .build();
     }
 }
