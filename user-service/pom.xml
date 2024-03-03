@@ -16,7 +16,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.zubi.ecommerce.user.Application</mainClass>
-        <jjwt.version>0.12.5</jjwt.version>
+
     </properties>
 
     <dependencies>
@@ -55,6 +55,12 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.5</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
     </dependencies>
 

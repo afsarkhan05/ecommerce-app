@@ -24,6 +24,8 @@
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spring-doc.version>2.3.0</spring-doc.version>
+        <jjwt.version>0.12.5</jjwt.version>
+        <flyway.version>9.22.3</flyway.version>
 
         <docker.image.prefix>afsarkhan05</docker.image.prefix>
         <fabric8.plugin.version>0.43.4</fabric8.plugin.version>

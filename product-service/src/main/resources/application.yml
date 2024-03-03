@@ -18,6 +18,10 @@ spring:
   cloud:
     discovery:
       enabled: false
+
+  flyway:
+    enabled: true
+
 server:
   port: 8082
   servlet:
