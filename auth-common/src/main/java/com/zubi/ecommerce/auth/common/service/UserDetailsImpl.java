@@ -1,4 +1,4 @@
-package com.zubi.ecommerce.user.service;
+package com.zubi.ecommerce.auth.common.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;

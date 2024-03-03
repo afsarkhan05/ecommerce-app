@@ -38,5 +38,5 @@ management:
 ecommerce:
   app:
     jwtCookieName: ecommerce
-    jwtSecret: ecommerceSecretKey
-    jwtExpirationMs: 86400000
+    jwtSecret: "c8d08ea6866c964ff9123c22270502beb2ef2f8194cfaafd6e90601777196b83"
+    jwtExpirationMs: 900000 #15 mins

@@ -41,7 +41,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${fabric8.plugin.version}</version>
@@ -76,7 +76,7 @@
                         </image>
                     </images>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

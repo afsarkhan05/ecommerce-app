@@ -1,6 +1,6 @@
 package com.zubi.ecommerce.user.security;
 
-import com.zubi.ecommerce.user.filter.AuthTokenFilter;
+import com.zubi.ecommerce.auth.common.filter.AuthTokenFilter;
 import com.zubi.ecommerce.user.security.jwt.AuthEntryPointJwt;
 import com.zubi.ecommerce.user.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,10 @@ public class SecurityConfiguration {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    //private AuthTokenFilter authFilter;
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
+    public AuthTokenFilter authFilter() {
+       // this.authFilter = new AuthTokenFilter();
         return new AuthTokenFilter();
     }
 
@@ -62,14 +64,15 @@ public class SecurityConfiguration {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
+                        auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/*", "/v3/api-docs").permitAll()
+
                                 .requestMatchers("/api/test/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -20,7 +20,6 @@ public class UserDTO {
         return User.builder()
                 .id(getUserId())
                 .userName(getUserName())
-                .password(getPassword())
                 .email(getEmail())
                 .build();
     }

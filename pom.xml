@@ -17,6 +17,7 @@
         <module>user-service</module>
         <module>common</module>
         <module>product-service</module>
+        <module>auth-common</module>
     </modules>
 
     <properties>

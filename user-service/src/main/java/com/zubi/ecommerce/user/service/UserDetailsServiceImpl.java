@@ -1,5 +1,6 @@
 package com.zubi.ecommerce.user.service;
 
+import com.zubi.ecommerce.auth.common.service.UserDetailsImpl;
 import com.zubi.ecommerce.user.model.User;
 import com.zubi.ecommerce.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
