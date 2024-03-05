@@ -1,12 +1,15 @@
 package com.zubi.ecommerce.user.controller;
 
 import com.zubi.ecommerce.auth.common.service.UserDetailsImpl;
+import com.zubi.ecommerce.common.enums.ErrorCode;
+import com.zubi.ecommerce.common.exceptions.CustomException;
 import com.zubi.ecommerce.user.dto.LoginRequest;
 import com.zubi.ecommerce.user.dto.LoginResponse;
 import com.zubi.ecommerce.user.dto.UserDTO;
 import com.zubi.ecommerce.user.model.User;
 import com.zubi.ecommerce.user.repository.UserRepository;
 import com.zubi.ecommerce.user.security.jwt.JwtTokenCreatorUtil;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -68,14 +71,13 @@ public class LoginController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDTO signUpRequest) {
         Optional<Long> optionalLong = userRepository.existsByUserName(signUpRequest.getUserName());
         if (! optionalLong.isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
+            throw new CustomException("Error: Username is already taken!", ErrorCode.CUSTOM_ERROR_MESSAGE.getCode());
+         }
 
         Optional<String> optionalS = userRepository.existsByEmail(signUpRequest.getEmail());
         if (! optionalS.isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            throw new CustomException("Error: Email is already in use!", ErrorCode.CUSTOM_ERROR_MESSAGE.getCode());
         }
-
         // Create new user's account
         User user = signUpRequest.toUser();
         user.setPassword(encoder.encode(signUpRequest.getPassword()));

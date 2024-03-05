@@ -3,6 +3,8 @@ package com.zubi.ecommerce.common.exceptions;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.zubi.ecommerce.common.enums.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ApiError apiError = ApiError.builder()
                     .errorCode(ErrorCode.REQUEST_MALFORMED.getCode())
                     .errorMessage(ErrorCode.REQUEST_MALFORMED.getMessage())
-                    .debugMessage(debugMessage)
+                   // .debugMessage(debugMessage)
                     .build();
             errors.add(apiError);
         }
@@ -48,6 +50,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<List<ApiError>> handleCustomException(CustomException ex) {
+        // List<String> errorMessages = new ArrayList<>();
+        List<ApiError> errors = new ArrayList<>();
+        errors.add(ApiError.builder()
+                .errorMessage(ex.getMessage())
+                .errorCode(ex.getErrorCode())
+                //.debugMessage(ex.getLocalizedMessage())
+                .build());
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List<ApiError>> handleConstraintViolationException(ConstraintViolationException ex) {
+       // List<String> errorMessages = new ArrayList<>();
+        List<ApiError> errors = new ArrayList<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errors.add(ApiError.builder()
+                    .errorMessage(violation.getMessage())
+                    .errorCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+                    //.debugMessage(ex.getLocalizedMessage())
+                    .build());
+        }
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<Object> handleInternalServerError(Exception ex){
@@ -56,7 +85,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errors.add(ApiError.builder()
                         .errorMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                         .errorCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
-                        .debugMessage(ex.getLocalizedMessage())
+                        //.debugMessage(ex.getLocalizedMessage())
                         .build());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }

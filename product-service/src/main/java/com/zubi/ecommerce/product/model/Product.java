@@ -36,8 +36,8 @@ public class Product {
 
     public ProductDTO toDTO(){
         return ProductDTO.builder()
-                .userName(getName())
-                .userId(getId())
+                .productName(getName())
+                .productId(getId())
                 .price(getPrice())
                 .quantity(getQuantity())
                 .status(getStatus())

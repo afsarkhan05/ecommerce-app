@@ -9,19 +9,19 @@ import lombok.Data;
 @Data
 public class ProductDTO {
 
-    private Long userId;
-    private String userName;
-
-    private Integer quantity;
+    private Long productId;
+    private String productName;
 
     private Double price;
+
+    private Integer quantity;
 
     private ProductStatus status;
 
     public Product toEntity(){
         return Product.builder()
-                .id(getUserId())
-                .name(getUserName())
+                .id(getProductId())
+                .name(getProductName())
                 .price(getPrice())
                 .quantity(getQuantity())
                 .status(getStatus())

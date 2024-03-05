@@ -17,6 +17,10 @@ spring:
         default_schema: user_mgmt
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
+  jackson:
+    default-property-inclusion: non_null
+
   cloud:
     discovery:
       enabled: false

@@ -2,7 +2,9 @@ package com.zubi.ecommerce.common.enums;
 
 public enum ErrorCode {
     CUSTOM_ERROR_MESSAGE("1234", "{0}"),
-    REQUEST_MALFORMED("1235", "Request is malformed.");
+    REQUEST_MALFORMED("1235", "Request is malformed."),
+
+    VALIDATION_ERROR("6789", "Validation failed");
 
     private String message;
     private String code;
