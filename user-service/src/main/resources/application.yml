@@ -39,8 +39,29 @@ management:
       exposure:
         include: "*"
 
+#login and auth related
+
 ecommerce:
   app:
     jwtCookieName: ecommerce
     jwtSecret: "c8d08ea6866c964ff9123c22270502beb2ef2f8194cfaafd6e90601777196b83"
     jwtExpirationMs: 900000 #15 mins
+
+#eureka client & server related
+
+eureka:
+  instance:
+    name: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+      flywaydb: DEBUG

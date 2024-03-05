@@ -7,22 +7,24 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.security.Key;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,46 +56,67 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+        log.info("Inside Authfilter");
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && validateJwtToken(jwt)) {
-                Map<String, String> claimMap = getIdentityFromJwtToken(jwt);
+            if (jwt != null) {
+                if (validateJwtToken(jwt)) {
+                    log.info("Token verified");
+                    Map<String, String> claimMap = getIdentityFromJwtToken(jwt);
 
-                UserDetails userDetails = UserDetailsImpl.
-                        builder()
-                        //.id(claimMap.get(AuthConstant.USERNAME))
-                        //.email(user.getEmail())
-                        .username(claimMap.get(AuthConstant.USERNAME))
-                        //.password(user.getPassword())
-                        .build();
-                        //userDetailsService.loadUserByUsername(username);
+                    UserDetails userDetails = UserDetailsImpl.
+                            builder()
+                            .username(claimMap.get(AuthConstant.USERNAME))
+                            .build();
 
 
-                UsernamePasswordAuthenticationToken authentication =
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails,
+                                    null,
+                                    userDetails.getAuthorities());
+
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    filterChain.doFilter(request, response);
+
+                /*UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,
                                 null,
-                                userDetails.getAuthorities());
+                                userDetails.getAuthorities());*/
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    //authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.error("Token expired or invalid");
+                    // Handle unauthenticated requests
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+            }else {
+                log.info("No token provided, authentication will handle.");
+                filterChain.doFilter(request, response);
             }
+
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
 
-        filterChain.doFilter(request, response);
+
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String jwt = getJwtFromCookies(request);
+        String jwt = getJwtFromHeader(request);
         return jwt;
     }
 
-    public String getJwtFromCookies(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-        if (cookie != null) {
-            return cookie.getValue();
+    public String getJwtFromHeader(HttpServletRequest request) {
+        String token = request.getHeader(AuthConstant.AUTHORIZATION);
+        if (! StringUtils.isEmpty(token)) {
+            return token;
         } else {
             return null;
         }
@@ -127,6 +150,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
+        } catch (Exception e){
+            log.error("Invalid JWT token");
         }
 
         return false;

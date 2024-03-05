@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 //@EnableWebSecurity
-@EnableMethodSecurity
+@EnableWebSecurity
 //(securedEnabled = true,
 //jsr250Enabled = true,
 //prePostEnabled = true) // by default
@@ -31,11 +32,11 @@ public class SecurityConfiguration {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
-    //private AuthTokenFilter authFilter;
-    @Bean
-    public AuthTokenFilter authFilter() {
-       // this.authFilter = new AuthTokenFilter();
-        return new AuthTokenFilter();
+    private AuthTokenFilter authTokenFilter;
+    @Autowired
+    public void authFilter(AuthTokenFilter authTokenFilter) {
+       this.authTokenFilter = authTokenFilter;
+        //return new AuthTokenFilter();
     }
 
     @Bean
@@ -72,7 +73,7 @@ public class SecurityConfiguration {
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

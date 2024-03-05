@@ -1,6 +1,8 @@
 package com.zubi.ecommerce.user.controller;
 
 import com.zubi.ecommerce.auth.common.service.UserDetailsImpl;
+import com.zubi.ecommerce.user.dto.LoginRequest;
+import com.zubi.ecommerce.user.dto.LoginResponse;
 import com.zubi.ecommerce.user.dto.UserDTO;
 import com.zubi.ecommerce.user.model.User;
 import com.zubi.ecommerce.user.repository.UserRepository;
@@ -39,7 +41,7 @@ public class LoginController {
     JwtTokenCreatorUtil jwtTokenCreatorUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDTO loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
@@ -48,7 +50,7 @@ public class LoginController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return ResponseEntity.ok().body(jwtTokenCreatorUtils.generateTokenFromUsername(userDetails.getUsername(), userDetails.getId().toString()));
+        return ResponseEntity.ok().body(LoginResponse.builder().token(jwtTokenCreatorUtils.generateTokenFromUsername(userDetails.getUsername(), userDetails.getId().toString())).build());
 
         //ResponseCookie jwtCookie = jwtTokenCreatorUtils.generateJwtCookie(userDetails);
 

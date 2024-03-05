@@ -20,16 +20,34 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.zubi.ecommerce.common</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
 
+        <!-- S1E2 Add Login -->
+
         <dependency>
             <groupId>com.zubi.ecommerce.auth.common</groupId>
             <artifactId>auth-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -57,11 +75,25 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- S1E2 Add Login ends-->
+
+
+        <!-- S1E3 Add Flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
         </dependency>
+
+        <!-- S1E3 Add Flyway ends -->
+
+        <!-- S1E4 Add Eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!-- S1E4 Add Eureka ends -->
+
     </dependencies>
 
     <build>
