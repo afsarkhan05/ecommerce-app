@@ -44,7 +44,7 @@ public class User {
         return UserDTO.builder()
                 .userId(this.getId())
                 .userName(getUserName())
-                .password(getPassword())
+                //.password(getPassword())
                 .email(getEmail())
                 .build();
     }

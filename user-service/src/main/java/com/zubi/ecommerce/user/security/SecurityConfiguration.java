@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/*", "/v3/api-docs").permitAll()
+                        auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/*", "/v3/api-docs", "/actuator/**").permitAll()
 
                                 .requestMatchers("/api/test/**").permitAll()
                                 .anyRequest().authenticated()
