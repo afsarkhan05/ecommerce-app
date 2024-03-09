@@ -39,6 +39,8 @@ public class ApplicationConfig {
         .info(info());
     }
 
+
+
     private Info info(){
         return new Info()
                 .title(AppConstants.TITLE)

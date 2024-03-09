@@ -2,6 +2,8 @@ package com.zubi.ecommerce.product.controller;
 
 import com.zubi.ecommerce.product.service.ProductService;
 import com.zubi.ecommerce.product.utils.AppConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Operation(security = {@SecurityRequirement(name ="api_key")})
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable(value = AppConstants.ID, required = true) Long userId) {
         // User registration logic
@@ -30,6 +33,7 @@ public class ProductController {
         //return ResponseEntity.ok(userService.get(userId));
     }
 
+    @Operation(security = {@SecurityRequirement(name ="api_key")})
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> listProduct() {
         // User registration logic
