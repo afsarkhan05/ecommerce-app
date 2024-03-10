@@ -67,5 +67,9 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
-      flywaydb: DEBUG
+        security: INFO
+      flywaydb: INFO
+
+
+springdoc:
+  show-actuator: false
